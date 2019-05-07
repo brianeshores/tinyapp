@@ -9,6 +9,11 @@
   <title>TinyApp</title>
 </head>
 <body style="font-size:20px; padding:50px;">
+  <header>
+    <%= include _header.ejs %>
+  </header>
+  <p>Creat New tinyURLs</p>
+  <p>My URLs</p>
   <ul>
     <%for (shortUrl in urls) {%>
     <li><%= shortUrl %>  <%= urls[shortUrl] %> </li>
