@@ -1,18 +1,19 @@
 var express = require("express");
 var app = express();
 var PORT = 8080; // default port 8080
-var randomString = "";
+
 
 function generateRandomString() {
-  var charSet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*';
+  let randomString = "";
+  var charSet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   for (var i = 0; i < 6; i++) {
   var randomPos = Math.floor(Math.random() * charSet.length);
   randomString += charSet.substring(randomPos, randomPos+1);
   }
   return randomString;
 }
-generateRandomString();
-console.log("randomString: ", randomString);
+
+// console.log("randomString: ", randomString);
 app.set("view engine", "ejs");
 
 var urlDatabase = {
@@ -44,8 +45,11 @@ app.get("/urls/:shortURL", (req, res) => {
   res.render("urls_show", templateVars);
 });
 app.post("/urls", (req, res) => {
-  console.log(req.body);  // Log the POST request body to the console
-  res.send("Ok");         // Respond with 'Ok' (we will replace this)
+  let shortURL = generateRandomString();
+  let longURL = req.body.longURL;
+  urlDatabase[shortURL] =longURL;
+  console.log("url urlDatabase: ", urlDatabase); // Log the POST request body to the console
+  res.send(shortURL);         // Respond with 'Ok' (we will replace this)
 });
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
