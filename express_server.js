@@ -1,14 +1,14 @@
-var express = require("express");
-var app = express();
-var PORT = 8080; // default port 8080
-var cookieParser = require('cookie-parser');
+const express = require("express");
+const app = express();
+const PORT = 8080; // default port 8080
+const cookieParser = require('cookie-parser');
 app.use(cookieParser());
 
 function generateRandomString() {
   let randomString = "";
-  var charSet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  const charSet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   for (var i = 0; i < 6; i++) {
-  var randomPos = Math.floor(Math.random() * charSet.length);
+  const randomPos = Math.floor(Math.random() * charSet.length);
   randomString += charSet.substring(randomPos, randomPos+1);
   }
   return randomString;
@@ -17,10 +17,23 @@ function generateRandomString() {
 // console.log("randomString: ", randomString);
 app.set("view engine", "ejs");
 
-var urlDatabase = {
+const urlDatabase = {
   "b2xVn2": "http://www.lighthouselabs.ca",
   "9sm5xK": "http://www.google.com"
 };
+
+const users = { 
+  "userRandomID": {
+    id: "userRandomID", 
+    email: "user@example.com", 
+    password: "purple-monkey-dinosaur"
+  },
+ "user2RandomID": {
+    id: "user2RandomID", 
+    email: "user2@example.com", 
+    password: "dishwasher-funk"
+  }
+}
 
 const bodyParser = require("body-parser");
 
@@ -77,6 +90,14 @@ app.get("shortURL/u/:", (req, res) => {
   res.redirect(longUrl);
 });
 
+app.get("/register", (req, res) => {
+  let templateVars = {
+    email: req.body.email,
+    password: req.body.password
+  }
+  res.render("registration", templateVars);
+})
+
 app.post("/urls", (req, res) => {
   let shortURL = generateRandomString();
   let longURL = req.body.longURL;
@@ -102,7 +123,6 @@ app.post("/urls/:shortURL/update", (req, res) => {
   }
   urlDatabase[req.params.shortURL] = req.body.longURL
   res.redirect("/urls");
-
 });
 
 app.post("/urls/login", (req, res) => {
@@ -114,6 +134,12 @@ app.post("/urls/logout", (req, res) => {
   res.clearCookie("username");
   res.redirect("/urls");
 });
+
+app.post("/register", (req, res) => {
+  console.log("register body: ", req.body);
+  console.log('register: ', req.params);
+  res.redirect("/urls");
+})
 
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
