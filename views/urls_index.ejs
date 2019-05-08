@@ -10,13 +10,18 @@
 </head>
 <body style="font-size:20px; padding:50px;">
   <header>
-    <%= include _header.ejs %>
+    <%- include ./partials/_header.ejs %>
   </header>
   <p>Creat New tinyURLs</p>
   <p>My URLs</p>
   <ul>
     <%for (shortUrl in urls) {%>
-    <li><%= shortUrl %>  <%= urls[shortUrl] %> </li>
+    <li>
+      <%= shortUrl %>  <%= urls[shortUrl] %>
+      <form method="POST" action="/urls/<%= shortUrl %>/delete">Press to   delete URL
+        <button type="delete" class="btn btn-primary">Delete</button>
+      </form>
+    </li>
     <%};%>
   </ul>
   <link href="#">

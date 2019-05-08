@@ -22,40 +22,62 @@ var urlDatabase = {
 };
 
 const bodyParser = require("body-parser");
+
 app.use(bodyParser.urlencoded({extended: true}));
 
 app.get("/urls/new", (req, res) => {
   res.render("urls_new");
 });
+
 app.get("/", (req, res) => {
   res.send("Hello!");
 });
+
 app.get("/urls.json", (req, res) => {
   res.json(urlDatabase);
 });
+
 app.get("/hello", (req, res) => {
   res.send("<html><body>Hello <b>World</b></body></html>\n");
 });
+
 app.get("/urls", (req, res) => {
   let templateVars = { urls: urlDatabase };
   res.render("urls_index", templateVars);
 });
+
+// app.get("/urls/:shortURL/delete", (req, res) => {
+//   let templateVars = { urls: urlDatabase };
+//   console.log("req.params:", req.params);
+//   delete req.body.shortURL;
+//   res.render("urls_index", templateVars);
+// });
+
 app.get("/urls/:shortURL", (req, res) => {
   let templateVars = { urlString: req.params.shortURL };
   res.render("urls_show", templateVars);
 });
-app.get("/u/:shortURL", (req, res) => {
+
+app.get("shortURL/u/:", (req, res) => {
   let shortURL = req.params.shortURL;
   const longUrl = urlDatabase[shortURL];
   res.redirect(longUrl);
 });
+
 app.post("/urls", (req, res) => {
   let shortURL = generateRandomString();
   let longURL = req.body.longURL;
   urlDatabase[shortURL] =longURL;
-  console.log("url urlDatabase: ", urlDatabase); // Log the POST request body to the console
-  res.redirect("/urls/" +shortURL);         // Respond with 'Ok' (we will replace this)
+  console.log("urlDatabase: ", urlDatabase);
+  res.redirect("/urls/" +shortURL);
 });
+
+app.post("/urls/:shortURL/delete", (req, res) => {
+  console.log("req.params:", req.params);
+  delete urlDatabase[req.params.shortURL];
+  res.redirect("/urls");
+});
+
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
 });
