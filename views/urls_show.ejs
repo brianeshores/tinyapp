@@ -17,6 +17,13 @@
   <ul>
     <li> <%= urlString %> </li>
   </ul>
+  <form class="form-inline" action="/urls/<%= urlString %>/update" method="POST">
+      <div class="form-group mb-2">
+        <label for="longURL">Update longURL</label>
+        <input class="form-control" type="text" name="longURL" placeholder="http://" style="width: 300px; margin: 1em">
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </div>
+  </form>
   <link href="#">
 </body>
 </html>
