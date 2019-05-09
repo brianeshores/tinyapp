@@ -1,24 +1,11 @@
 Tiny Url
 
-
-
-<% if (username == undefined) {%>
-<form class="form-inline" action="/urls/login" method="POST">
-      <div class="form-group mb-2">
-        <label for="longURL">Login</label>
-        <input class="form-control" type="text" name="username" placeholder="username" style="width: 300px; margin: 1em">
-        <button type="submit" class="btn btn-primary">Submit</button>
-      </div>
-</form>
-
-
-<% } else {%>
-<form class="form-inline" action="/urls/logout" method="POST">
-      <div class="form-group mb-2">
-        <label for="longURL">Logout</label>
-        <input class="form-control" type="text" name="username" placeholder="username" style="width: 300px; margin: 1em">
-        <button type="submit" class="btn btn-primary">Submit</button>
-      </div>
+<% if (userID === undefined) {%>
+<%console.log("userID ", userID);%>
+  <a href = "/login">login</a>
+  <a href = "/register">register</a>
+<%} else {%>
+<form class="form-inline" action="/logout" method="POST">  
+  <button type="submit" class="btn btn-primary">logout</button>
 </form>
 <%}%>
-<p> <%= username %></p>
