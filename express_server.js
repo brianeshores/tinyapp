@@ -3,9 +3,10 @@ const app = express();
 const PORT = 8080; // default port 8080
 var cookieSession = require('cookie-session');
 const bcrypt = require('bcrypt');
-app.use(cookieSession({name: 'session',
-keys: ['my keys'],
-maxAge: 24 * 60 * 60 * 1000 
+app.use(cookieSession({
+  name: 'session',
+  keys: ['my keys'],
+  maxAge: 24 * 60 * 60 * 1000 
 }));
 
 function generateRandomString() {
@@ -69,15 +70,15 @@ const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({extended: true}));
 
 app.get("/urls/new", (req, res) => {
-  console.log("cookie: ", req.cookies);
+  // console.log("cookie: ", req.cookies);
   console.log("users: ", users);
-  if(users[req.cookies.user_id] === undefined) {
+  if(users[req.session.user_id] === undefined) {
     res.redirect("/urls");
   }
   else {
     let templateVars = {
       urls: urlDatabase, 
-        userID: users[req.cookies.user_id] 
+        userID: users[req.session.user_id] 
     }
     res.render("urls_new", templateVars);
   }
@@ -85,14 +86,14 @@ app.get("/urls/new", (req, res) => {
 
 app.get("/", (req, res) => {
   let templateVars = {
-    userID: users[req.cookies.user_id]
+    userID: users[req.session.user_id]
   }
   res.send("Hello!");
 });
 
 app.get("/urls.json", (req, res) => {
   let templateVars = {
-    userID: users[req.cookies.user_id]
+    userID: users[req.session.user_id]
   }
   res.json(urlDatabase);
 });
@@ -107,8 +108,10 @@ app.get("/urls", (req, res) => {
     urls: urlsForUser(req.session.user_id),
     userID: users[req.session.user_id],
   };
-  console.log("for user urls: ", urlsForUser(req.session.user_id));
-  console.log("urlDatabase ", urlDatabase);
+  console.log("user database ", users);
+  // console.log("userID ", userID)
+  // console.log("for user urls: ", urlsForUser(req.session.user_id));
+  // console.log("urlDatabase ", urlDatabase);
   // console.log("url database:", urlDatabase);
 
   res.render("urls_index", templateVars);
@@ -195,7 +198,7 @@ app.post("/login", (req, res) => {
 
 
 app.post("/logout", (req, res) => {
-  res.clearCookie("user_id");
+  req.session = null;
   res.redirect("/urls");
 });
 
