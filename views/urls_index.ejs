@@ -15,10 +15,10 @@
   <p>Create New tinyURLs</p>
   <p>My URLs</p>
   <ul>
-    <%for (shortUrl in urls) {%>
+    <%for (shortURL in urls) {%>
     <li>
-      <%= shortUrl %>  <%= urls[shortUrl] %>
-      <form method="POST" action="/urls/<%= shortUrl %>/delete">Press to   delete URL
+      <%= shortURL %>  <%= urls[shortURL].longURL %>
+      <form method="POST" action="/urls/<%= shortURL %>/delete">Press to   delete URL
         <button type="delete" class="btn btn-primary">Delete</button>
       </form>
     </li>

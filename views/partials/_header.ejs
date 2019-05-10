@@ -1,11 +1,12 @@
 Tiny Url
 
 <% if (userID === undefined) {%>
-<%console.log("userID ", userID);%>
   <a href = "/login">login</a>
   <a href = "/register">register</a>
 <%} else {%>
 <form class="form-inline" action="/logout" method="POST">  
+  <a href = "/urls"> URLS </a>|<a href = "/urls/new"> Create New Tiny Url </a>
+
   <button type="submit" class="btn btn-primary">logout</button>
 </form>
 <%}%>
