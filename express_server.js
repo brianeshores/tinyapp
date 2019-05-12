@@ -30,21 +30,13 @@ function checkIfUserExists (newEmail) {
 function urlsForUser(id) {
   let usersURLS = {};
   for(var shortURL in urlDatabase) {
-    // console.log("id: ", id);
-    // console.log("id in database:", urlDatabase[shortURL].id)
-    // console.log("shortURL ", urlDatabase[shortURL]);
-    // console.log("database ", urlDatabase);
     if(id === urlDatabase[shortURL].userID) {
       usersURLS[shortURL] = urlDatabase[shortURL];
     }
   }
-  console.log(usersURLS);
   return usersURLS;   
 }
 
-
-
-// console.log("randomString: ", randomString);
 app.set("view engine", "ejs");
 
 const urlDatabase = {
@@ -70,8 +62,6 @@ const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({extended: true}));
 
 app.get("/urls/new", (req, res) => {
-  // console.log("cookie: ", req.cookies);
-  console.log("users: ", users);
   if(users[req.session.user_id] === undefined) {
     res.redirect("/urls");
   }
@@ -108,11 +98,6 @@ app.get("/urls", (req, res) => {
     urls: urlsForUser(req.session.user_id),
     userID: users[req.session.user_id],
   };
-  console.log("user database ", users);
-  // console.log("userID ", userID)
-  // console.log("for user urls: ", urlsForUser(req.session.user_id));
-  // console.log("urlDatabase ", urlDatabase);
-  // console.log("url database:", urlDatabase);
 
   res.render("urls_index", templateVars);
 });
@@ -154,8 +139,6 @@ app.post("/urls", (req, res) => {
     longURL: longURL, 
     userID: req.session["user_id"] 
   };
-  console.log("user id: ", req.session['user_id']);
-  console.log("urlDatabase: ", urlDatabase);
   res.redirect("/urls/" +shortURL);
 });
 
@@ -224,9 +207,6 @@ app.post("/register", (req, res) => {
     }
     users[userID] = newUser;
     req.session.user_id = 'encrypted';
-    console.log("register body: ", req.body);
-    console.log('register: ', req.params);
-    console.log('users database ', users);
     res.redirect("/urls");
   }
 });
