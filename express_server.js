@@ -1,6 +1,6 @@
 const express = require("express");
 const app = express();
-const PORT = 8080; // default port 8080
+const PORT = 3000; // default port 8080;
 var cookieSession = require('cookie-session');
 const bcrypt = require('bcrypt');
 app.use(cookieSession({
@@ -93,11 +93,14 @@ app.get("/hello", (req, res) => {
 });
 
 app.get("/urls", (req, res) => {
-  
+  //
   let templateVars = { 
     urls: urlsForUser(req.session.user_id),
     userID: users[req.session.user_id],
   };
+  console.log("users: ", users);
+  console.log("req session: ,", req.session);
+  console.log("template vars: ", templateVars);
 
   res.render("urls_index", templateVars);
 });
@@ -133,13 +136,17 @@ app.get("/login", (req, res) => {
 })
 
 app.post("/urls", (req, res) => {
-  let shortURL = generateRandomString();
-  let longURL = req.body.longURL;
-  urlDatabase[shortURL] =  { 
-    longURL: longURL, 
-    userID: req.session["user_id"] 
-  };
-  res.redirect("/urls/" +shortURL);
+  if(req.session['user_id']) {
+    let shortURL = generateRandomString();
+    let longURL = req.body.longURL;
+    urlDatabase[shortURL] =  { 
+      longURL: longURL, 
+      userID: users[req.session.user_id] 
+    };
+    res.redirect("/urls/" +shortURL);
+  } else {
+    res.redirect("/login");
+  }
 });
 
 app.post("/urls/:shortURL/delete", (req, res) => {
@@ -166,7 +173,7 @@ app.post("/login", (req, res) => {
   const hashedPassword = bcrypt.hashSync(req.body.password, 10);
   let user = checkIfUserExists(req.body.email);
   if(user && bcrypt.compareSync(password, hashedPassword) === true) {
-    req.session.user_id = " encrypted ";
+    req.session.user_id = user.id;
     res.redirect("/urls");
   }
   else if (email.length === 0 || password.length === 0) {
@@ -182,7 +189,7 @@ app.post("/login", (req, res) => {
 
 app.post("/logout", (req, res) => {
   req.session = null;
-  res.redirect("/urls");
+  res.redirect("/login");
 });
 
 app.post("/register", (req, res) => {
@@ -206,7 +213,7 @@ app.post("/register", (req, res) => {
       password
     }
     users[userID] = newUser;
-    req.session.user_id = 'encrypted';
+    req.session.user_id = id;
     res.redirect("/urls");
   }
 });
