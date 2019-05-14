@@ -104,12 +104,6 @@ app.get("/urls", (req, res) => {
     urls: urlsForUser(req.session.user_id),
     userID: users[req.session.user_id],
   };
-<<<<<<< HEAD
-=======
-  console.log("users: ", users);
-  console.log("req session: ,", req.session);
-  console.log("template vars: ", templateVars);
->>>>>>> feature/user-registration
 
   res.render("urls_index", templateVars);
 });
@@ -149,15 +143,6 @@ app.get("/login", (req, res) => {
 })
 
 app.post("/urls", (req, res) => {
-<<<<<<< HEAD
-  let shortURL = generateRandomString();
-  let longURL = req.body.longURL;
-  urlDatabase[shortURL] =  { 
-    longURL: longURL, 
-    userID: req.session["user_id"] 
-  };
-  res.redirect("/urls/" +shortURL);
-=======
   if(req.session['user_id']) {
     let shortURL = generateRandomString();
     let longURL = req.body.longURL;
@@ -169,7 +154,6 @@ app.post("/urls", (req, res) => {
   } else {
     res.redirect("/login");
   }
->>>>>>> feature/user-registration
 });
 
 //removes URLs from database using buttons associated with...
@@ -244,11 +228,7 @@ app.post("/register", (req, res) => {
       password
     }
     users[userID] = newUser;
-<<<<<<< HEAD
-    req.session.user_id = 'encrypted';
-=======
     req.session.user_id = id;
->>>>>>> feature/user-registration
     res.redirect("/urls");
   }
 });
