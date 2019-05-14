@@ -1,6 +1,6 @@
 const express = require("express");
 const app = express();
-const PORT = 8080; // default port 8080
+const PORT = 3000; // default port 8080;
 var cookieSession = require('cookie-session');
 const bcrypt = require('bcrypt');
 app.use(cookieSession({
@@ -99,11 +99,17 @@ app.get("/hello", (req, res) => {
 
 //renders main page
 app.get("/urls", (req, res) => {
-  
+  //
   let templateVars = { 
     urls: urlsForUser(req.session.user_id),
     userID: users[req.session.user_id],
   };
+<<<<<<< HEAD
+=======
+  console.log("users: ", users);
+  console.log("req session: ,", req.session);
+  console.log("template vars: ", templateVars);
+>>>>>>> feature/user-registration
 
   res.render("urls_index", templateVars);
 });
@@ -143,6 +149,7 @@ app.get("/login", (req, res) => {
 })
 
 app.post("/urls", (req, res) => {
+<<<<<<< HEAD
   let shortURL = generateRandomString();
   let longURL = req.body.longURL;
   urlDatabase[shortURL] =  { 
@@ -150,6 +157,19 @@ app.post("/urls", (req, res) => {
     userID: req.session["user_id"] 
   };
   res.redirect("/urls/" +shortURL);
+=======
+  if(req.session['user_id']) {
+    let shortURL = generateRandomString();
+    let longURL = req.body.longURL;
+    urlDatabase[shortURL] =  { 
+      longURL: longURL, 
+      userID: users[req.session.user_id] 
+    };
+    res.redirect("/urls/" +shortURL);
+  } else {
+    res.redirect("/login");
+  }
+>>>>>>> feature/user-registration
 });
 
 //removes URLs from database using buttons associated with...
@@ -180,7 +200,7 @@ app.post("/login", (req, res) => {
   const hashedPassword = bcrypt.hashSync(req.body.password, 10);
   let user = checkIfUserExists(req.body.email);
   if(user && bcrypt.compareSync(password, hashedPassword) === true) {
-    req.session.user_id = " encrypted ";
+    req.session.user_id = user.id;
     res.redirect("/urls");
   }
   else if (email.length === 0 || password.length === 0) {
@@ -197,7 +217,7 @@ app.post("/login", (req, res) => {
 //to main page
 app.post("/logout", (req, res) => {
   req.session = null;
-  res.redirect("/urls");
+  res.redirect("/login");
 });
 //takes an input of email and password and saves
 //an encrypted password and cookie
@@ -224,7 +244,11 @@ app.post("/register", (req, res) => {
       password
     }
     users[userID] = newUser;
+<<<<<<< HEAD
     req.session.user_id = 'encrypted';
+=======
+    req.session.user_id = id;
+>>>>>>> feature/user-registration
     res.redirect("/urls");
   }
 });
