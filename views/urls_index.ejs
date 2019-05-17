@@ -12,14 +12,13 @@
   <header>
     <%- include ./partials/_header.ejs %>
   </header>
-  <p>Create New tinyURLs</p>
   <p>My URLs</p>
   <ul>
     <%for (shortURL in urls) {%>
     <li>
       <%= shortURL %>  <%= urls[shortURL].longURL %>
-      <form method="POST" action="/urls/<%= shortURL %>/delete">Press to   delete URL
-        <button type="delete" class="btn btn-primary">Delete</button>
+      <form method="POST" action="/urls/<%= shortURL %>/delete"> Press to delete URL
+        <button id="delete" type="delete" class="btn btn-primary">Delete</button>
       </form>
     </li>
     <%};%>
@@ -27,3 +26,14 @@
   <link href="#">
 </body>
 </html>
+
+<style>
+  p {
+    padding: .5em;
+  }
+
+  #delete {
+    margin: .5em;
+  }
+
+</style>

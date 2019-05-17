@@ -1,12 +1,28 @@
-Tiny Url
+<div id="header">
+<h1>Tiny Url</h1>
 
-<% if (locals.userID === undefined) {%>
-  <a href = "/login">login</a>
-  <a href = "/register">register</a>
-<%} else {%>
-<form class="form-inline" action="/logout" method="POST">  
-  <a href = "/urls"> URLS </a>|<a href = "/urls/new"> Create New Tiny Url </a>
-
+<% if (user) {%>
+  <p>Logged in as: <%= user.email %></p>
+  <form class="form-inline" action="/logout" method="POST">  
+  <a id=urls href = "/urls"> URLS </a>|<a id="create" href = "/urls/new"> Create New Tiny Url </a>
   <button type="submit" class="btn btn-primary">logout</button>
 </form>
+<%} else {%>
+  <a href = "/login">login</a>
+  <a href = "/register">register</a>
 <%}%>
+</div>
+ <style>
+ #urls {
+   padding: .5em;
+ }
+
+ #create {
+   padding: .5em;
+ }
+
+ #header {
+   background-color: lightgrey;
+   padding: 2em;
+ }
+ </style>
