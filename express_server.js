@@ -113,25 +113,20 @@ app.get("/urls", (req, res) => {
 
 app.get("/urls/:shortURL", (req, res) => {
   const userID = req.session.user_id;
-  // const urls =  urlsForUser(userID);
-  
+  const shortURL = users[req.session];
+
   if (!userID && urlDatabase[req.params.shortURL]["userID"] !== userID) {
-    res.status(403).send("Not your short URL.");
+    res.status(403).send("Not your short URL. Please Login or Register.");
   }
-  console.log(urlsForUser(req.session.user_id))
+  
   let templateVars = { 
-    // urlsToShow: urls,
     user: users[req.session["user_id"]],
-    urls: urlsForUser(req.session.user_id)
-    // urlString: req.params.shortURL,  
-    // longURL: req.params.longURL
+    urls: urlsForUser(req.session.user_id),
+    shortURL: shortURL
   }
+  
   res.render("urls_show", templateVars);
 });
-
-// check there is a user
-// check if user is owner of shorURL
-// get longURL corresponding to shorURL
 
 //renders updated longURL
 
@@ -192,7 +187,8 @@ app.post("/urls/:shortURL/update", (req, res) => {
   let longURL = req.body.longURL;
   urlDatabase[req.params.shortURL] = { 
     longURL: longURL, 
-    userID: req.session["user_id"] 
+    userID: req.session["user_id"],
+    shortURL: req.session.shortURL
   };
   res.redirect("/urls");
 });
