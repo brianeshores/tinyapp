@@ -104,7 +104,6 @@ app.get("/urls", (req, res) => {
     urls: urlsForUser(req.session.user_id),
     user: users[req.session["user_id"]],
   };
-  console.log("email???: ", users[req.session.email])
 
   res.render("urls_index", templateVars);
 });
@@ -164,13 +163,10 @@ app.post("/urls", (req, res) => {
       userID: req.session.user_id
     };
     res.redirect("/urls/" +shortURL);
-  // } else {
-  //   res.redirect("/login");
    }
 });
 
-//removes URLs from database using buttons associated with...
-//each URL
+//removes URLs from database using buttons associated with each URL
 
 app.post("/urls/:shortURL/delete", (req, res) => {
   if (req.session['user_id']) {
